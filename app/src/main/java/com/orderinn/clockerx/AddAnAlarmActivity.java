@@ -6,8 +6,10 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -17,6 +19,7 @@ public class AddAnAlarmActivity extends AppCompatActivity {
 
     TimePicker timePicker;
     TextView timeText;
+    EditText alarmTitle;
     Calendar newAlarm;
 
     @Override
@@ -26,7 +29,7 @@ public class AddAnAlarmActivity extends AppCompatActivity {
 
         newAlarm = Calendar.getInstance();
 
-
+        alarmTitle = findViewById(R.id.alarmTitle);
         timeText = findViewById(R.id.timeText);
         timePicker = findViewById(R.id.timePicker);
         timePicker.setIs24HourView(true);
@@ -41,20 +44,23 @@ public class AddAnAlarmActivity extends AppCompatActivity {
             }
         });
 
-
-
-
     }
 
     public void addAlarm(View view){
         //Put a new alarm to the intent
-        Log.i("BUTTON", "CLICKED");
 
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("Time", newAlarm.getTimeInMillis());
+        setResult(RESULT_OK, returnIntent);
+        Log.i("BUTTON", "CLICKED");
+        Log.i("Giderken", String.valueOf(newAlarm.getTimeInMillis()));
+        finish();
     }
 
 
     public void setAlarm(Calendar cal){
         Intent intent = new Intent(getApplicationContext(), AlarmReceiver.BroadCastReceive.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("Title", alarmTitle.getText());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), 0 , intent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmManager.setExact(AlarmManager.RTC_WAKEUP,  cal.getTimeInMillis(), pendingIntent);

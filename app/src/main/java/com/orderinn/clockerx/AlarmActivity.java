@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -28,14 +29,12 @@ public class AlarmActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
 
+        test();
+
         listView = findViewById(R.id.listView);
         alarms = new ArrayList<>();
         alarmList = new ArrayList<>();
         arrayAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, alarmList);
-
-
-        //alarms.add(newAlarm);
-        alarmList.add("7:40");
         listView.setAdapter(arrayAdapter);
     }
 
@@ -48,6 +47,56 @@ public class AlarmActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //Get alarm information
+        if(resultCode == RESULT_OK && requestCode == 1){
+            long millis = data.getLongExtra("Time", 0);
+            Calendar newAlarm = Calendar.getInstance();
+            newAlarm.setTimeInMillis(millis);
+            Log.i("Gelirken", String.valueOf(millis));
+            alarms.add(newAlarm);
+            sortAlarms();
+
+        }
     }
 
+    private void sortAlarms(){
+        //Insertion Sort alarms and alarmList
+
+       for(int j=1; j < alarms.size(); j++){
+
+           int i = j-1;
+           Calendar key = alarms.get(j);
+           //Shifts the greater values to the right
+           while( i>-1 &&alarms.get(i).compareTo(key) > 0){
+               alarms.set(i+1, alarms.get(i));
+               i--;
+           }
+           alarms.set(i+1, key);
+       }
+        setAlarmList();
+    }
+
+
+    private void setAlarmList(){
+        alarmList.clear();
+        for(Calendar time: alarms){
+            long millis = time.getTimeInMillis();
+            int minutes = (int) ((millis / (1000*60)) % 60);
+            int hours   = (int) ((millis / (1000*60*60)) % 24);
+
+            alarmList.add(String.format("%02d : %02d", hours, minutes) );
+        }
+        arrayAdapter.notifyDataSetChanged();
+    }
+
+    private void test(){
+        Calendar test1 = Calendar.getInstance();
+        test1.set(Calendar.HOUR_OF_DAY, 16);
+        test1.set(Calendar.MINUTE, 55);
+
+        Calendar test2 = Calendar.getInstance();
+        test2.set(Calendar.HOUR_OF_DAY, 12);
+        test2.set(Calendar.MINUTE, 55);
+
+        Log.i("TEST", String.valueOf(test2.compareTo(test1)));
+    }
 }
