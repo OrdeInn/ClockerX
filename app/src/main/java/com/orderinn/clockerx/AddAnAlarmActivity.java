@@ -52,8 +52,6 @@ public class AddAnAlarmActivity extends AppCompatActivity {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("Time", newAlarm.getTimeInMillis());
         setResult(RESULT_OK, returnIntent);
-        Log.i("BUTTON", "CLICKED");
-        Log.i("Giderken", String.valueOf(newAlarm.getTimeInMillis()));
         finish();
     }
 

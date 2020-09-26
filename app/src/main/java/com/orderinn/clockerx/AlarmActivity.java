@@ -29,8 +29,6 @@ public class AlarmActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
 
-        test();
-
         listView = findViewById(R.id.listView);
         alarms = new ArrayList<>();
         alarmList = new ArrayList<>();
@@ -38,10 +36,12 @@ public class AlarmActivity extends AppCompatActivity {
         listView.setAdapter(arrayAdapter);
     }
 
+    //onClick Method
     public void addAnAlarm(View view){
         Intent intent = new Intent(getApplicationContext(), AddAnAlarmActivity.class);
         startActivityForResult(intent, 1);
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -51,7 +51,6 @@ public class AlarmActivity extends AppCompatActivity {
             long millis = data.getLongExtra("Time", 0);
             Calendar newAlarm = Calendar.getInstance();
             newAlarm.setTimeInMillis(millis);
-            Log.i("Gelirken", String.valueOf(millis));
             alarms.add(newAlarm);
             sortAlarms();
 
@@ -86,17 +85,5 @@ public class AlarmActivity extends AppCompatActivity {
             alarmList.add(String.format("%02d : %02d", hours, minutes) );
         }
         arrayAdapter.notifyDataSetChanged();
-    }
-
-    private void test(){
-        Calendar test1 = Calendar.getInstance();
-        test1.set(Calendar.HOUR_OF_DAY, 16);
-        test1.set(Calendar.MINUTE, 55);
-
-        Calendar test2 = Calendar.getInstance();
-        test2.set(Calendar.HOUR_OF_DAY, 12);
-        test2.set(Calendar.MINUTE, 55);
-
-        Log.i("TEST", String.valueOf(test2.compareTo(test1)));
     }
 }
