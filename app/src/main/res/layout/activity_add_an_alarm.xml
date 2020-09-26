@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddAnAlarmActivity">
+
+
+    <TimePicker
+        android:id="@+id/timePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:padding="25dp"
+        android:theme="@style/CustomTimePicker"
+        android:timePickerMode="spinner"
+        />
+
+    <TextView
+        android:id="@+id/timeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Time : "
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/timePicker"
+        android:layout_marginTop="45dp"
+        android:textSize="35sp"
+        android:textColor="#008000"
+        android:textStyle="bold"
+        />
+
+    <Button
+        android:id="@+id/setButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="110dp"
+        android:background="#25DBD1"
+        android:onClick="addAlarm"
+        android:text="Set"
+        android:textSize="25sp" />
+
+
+
+</RelativeLayout>
