@@ -37,7 +37,7 @@ public class ObjectSerializer {
     public static Object deserializeStringToArrayList(String str){
 
         if(str == null || str.length() == 0){
-            return new ArrayList<Calendar>();
+            return new ArrayList<AlarmObject>();
         }
 
         try{
@@ -45,7 +45,7 @@ public class ObjectSerializer {
 
             ByteArrayInputStream byteIn = new ByteArrayInputStream(bytesToGet);
             ObjectInputStream in = new ObjectInputStream(byteIn);
-            ArrayList<Calendar> arrayListToReturn = (ArrayList<Calendar>) in.readObject();
+            ArrayList<AlarmObject> arrayListToReturn = (ArrayList<AlarmObject>) in.readObject();
 
             in.close();
 

@@ -51,6 +51,7 @@ public class AddAnAlarmActivity extends AppCompatActivity {
 
         Intent returnIntent = new Intent();
         returnIntent.putExtra("Time", newAlarm.getTimeInMillis());
+        returnIntent.putExtra("Title", alarmTitle.getText().toString());
         setResult(RESULT_OK, returnIntent);
         finish();
     }

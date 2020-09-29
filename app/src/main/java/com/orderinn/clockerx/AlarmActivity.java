@@ -2,6 +2,8 @@ package com.orderinn.clockerx;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -13,8 +15,10 @@ import android.os.SystemClock;
 import android.provider.AlarmClock;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridLayout;
 import android.widget.ListView;
 
 import java.sql.Time;
@@ -23,10 +27,9 @@ import java.util.Calendar;
 
 public class AlarmActivity extends AppCompatActivity {
 
-    ListView listView;
-    ArrayList<Calendar> alarms;
-    ArrayList<String> alarmList;
-    ArrayAdapter arrayAdapter;
+    GridLayout alarmListGridLayout;
+    private ArrayList<AlarmObject> alarms;
+    private ArrayList<SwitchCompat> alarmViews;
     SharedPreferences sharedPreferences;
     ObjectSerializer objectSerializer;
 
@@ -40,27 +43,13 @@ public class AlarmActivity extends AppCompatActivity {
         objectSerializer = new ObjectSerializer();
 
         //Fundamental initializations
-        listView = findViewById(R.id.listView);
         alarms = new ArrayList<>();
-        alarmList = new ArrayList<>();
-        arrayAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, alarmList);
+        alarmViews = new ArrayList<>();
+        alarmListGridLayout = (GridLayout) findViewById(R.id.alarmListGridLayout);
 
         getAlarmsFromPreferences();
 
-        listView.setAdapter(arrayAdapter);
 
-        //Long click listener to delete alarms in the list
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                alarms.remove(i);
-                alarmList.remove(i);
-                arrayAdapter.notifyDataSetChanged();
-
-                return true;
-            }
-        });
 
     }
 
@@ -70,6 +59,9 @@ public class AlarmActivity extends AppCompatActivity {
         startActivityForResult(intent, 1);
     }
 
+
+
+
     //Gets alarm information that set previous activity and save it in shared preferences
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -77,57 +69,68 @@ public class AlarmActivity extends AppCompatActivity {
 
         if(resultCode == RESULT_OK && requestCode == 1){
             long millis = data.getLongExtra("Time", 0);
-            Calendar newAlarm = Calendar.getInstance();
-            newAlarm.setTimeInMillis(millis);
+            String title = data.getStringExtra("Title");
+
+            AlarmObject newAlarm = new AlarmObject(this, millis, title);
             alarms.add(newAlarm);
-
-            sortAlarms();
-
+            AlarmObject.sortObjectArrayList(alarms);
+            syncAlarmLists();
         }
     }
 
-    private void sortAlarms(){
-        //Insertion Sort function for arrays alarms and alarmList.
-
-       for(int j=1; j < alarms.size(); j++){
-
-           int i = j-1;
-           Calendar key = alarms.get(j);
-           //Shifts the greater values to the right
-           while( i>-1 &&alarms.get(i).compareTo(key) > 0){
-               alarms.set(i+1, alarms.get(i));
-               i--;
-           }
-           alarms.set(i+1, key);
-       }
-        setAlarmList();
-    }
-
-    //alarmList is String version of alarms to show in listview. Main implementations implemented alarms array and setAlarmList makes sync arrays.
-    private void setAlarmList(){
-        alarmList.clear();
-        for(Calendar time: alarms){
-            long millis = time.getTimeInMillis();
-            int minutes = (int) ((millis / (1000*60)) % 60);
-            int hours   = (int) ((millis / (1000*60*60)) % 24);
-
-            alarmList.add(String.format("%02d : %02d", hours, minutes) );
+    private void syncAlarmLists() {
+        alarmViews.clear();
+        alarmListGridLayout.removeAllViews();
+        for(AlarmObject alarm : alarms) {
+            SwitchCompat switchCompat = createSwitchCompatObject(alarm.getTitle(), alarm.getTime());
+            alarmViews.add(switchCompat);
         }
-        arrayAdapter.notifyDataSetChanged();
+        displayAlarmListViews();
+
     }
+
+
+
+
+    private SwitchCompat createSwitchCompatObject(String title, long millis){
+
+        SwitchCompat switchCompat = new SwitchCompat(this);
+        switchCompat.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        switchCompat.setThumbResource(R.drawable.thumb);
+        switchCompat.setTrackResource(R.drawable.track);
+        int minutes = (int) ((millis / (1000*60)) % 60);
+        int hours   = (int) ((millis / (1000*60*60)) % 24);
+        switchCompat.setText(title + "\n" + String.format("%02d : %02d", hours, minutes));
+        switchCompat.setTextSize(35);
+        switchCompat.setPadding(0, 0, 20, 0);
+
+        return switchCompat ;
+    }
+
+
 
     //Gets alarms from shared preferences to call in onCreate method.
     private void getAlarmsFromPreferences(){
         String tmpString = sharedPreferences.getString("Alarms", "");
         try{
-            alarms = (ArrayList<Calendar>) objectSerializer.deserializeStringToArrayList(tmpString);
+            alarms = (ArrayList<AlarmObject>) objectSerializer.deserializeStringToArrayList(tmpString);
             if(alarms.size() > 0){
-                sortAlarms();
+                AlarmObject.sortObjectArrayList(alarms);
             }
-        }catch(Exception e){
+        }
+        catch(Exception e){
             e.printStackTrace();
         }
+        syncAlarmLists();
     }
+
+    private void displayAlarmListViews(){
+        for(SwitchCompat switchCompat : alarmViews) {
+            alarmListGridLayout.addView(switchCompat);
+        }
+    }
+
+
 
     //Save to shared preferences final form of alarms before finish the activity.
     @Override
