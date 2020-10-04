@@ -2,12 +2,9 @@ package com.orderinn.clockerx;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -46,27 +43,21 @@ public class AddAnAlarmActivity extends AppCompatActivity {
 
     }
 
-    public void addAlarm(View view){
+    public void newAlarm(View view){
         //Put a new alarm to the intent
 
         Intent returnIntent = new Intent();
         returnIntent.putExtra("Time", newAlarm.getTimeInMillis());
         returnIntent.putExtra("Title", alarmTitle.getText().toString());
         setResult(RESULT_OK, returnIntent);
+
         finish();
     }
 
 
-    public void setAlarm(Calendar cal){
-        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.BroadCastReceive.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("Title", alarmTitle.getText());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), 0 , intent, 0);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP,  cal.getTimeInMillis(), pendingIntent);
-        Log.i("ALARMINFO", "NEW ALARM SET");
 
-    }
 
+    
 
 
 }

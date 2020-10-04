@@ -51,7 +51,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
         android:background="#25DBD1"
-        android:onClick="addAlarm"
+        android:onClick="newAlarm"
         android:text="Set"
         android:textSize="25sp" />
 

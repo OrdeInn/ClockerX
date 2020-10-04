@@ -13,10 +13,12 @@ public class AlarmObject implements Serializable {
 
     private Calendar time;
     private String title;
-    public AlarmObject(Context context, long millis, String consTitle){
+    private int id;
+    public AlarmObject(Context context, long millis, String consTitle, int consId){
         time = Calendar.getInstance();
         time.setTimeInMillis(millis);
         title = consTitle;
+        id = consId;
 
 
     }
@@ -52,7 +54,7 @@ public class AlarmObject implements Serializable {
 
     public long getTime(){ return time.getTimeInMillis(); }
     public String getTitle(){ return title; }
-
+    public int getId() { return id; }
 
 
 

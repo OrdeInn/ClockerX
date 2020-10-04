@@ -3,6 +3,11 @@
     package="com.orderinn.clockerx">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="your.package.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="true"
@@ -11,12 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AddAnAlarmActivity" />
-        <activity android:name=".AlarmReceiver" />
-        <activity android:name=".EggTimerActivity" />
-        <activity android:name=".WorldClockActivty" />
-        <activity android:name=".TimerActivty" />
-        <activity android:name=".AlarmActivity" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,8 +24,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".AddAnAlarmActivity" />
+        <activity android:name=".AlarmReceiver" android:excludeFromRecents="true" android:showOnLockScreen="true" android:showWhenLocked="true" android:turnScreenOn="true" android:showForAllUsers="true"
+            />
+        <activity android:name=".EggTimerActivity" android:parentActivityName=".MainActivity" />
+        <activity android:name=".WorldClockActivty" android:parentActivityName=".MainActivity"/>
+        <activity android:name=".TimerActivty" android:parentActivityName=".MainActivity"/>
+        <activity android:name=".AlarmActivity" android:parentActivityName=".MainActivity"/>
 
-        <receiver android:name=".AlarmReceiver$BroadCastReceive" />
+
+        <receiver android:name="com.orderinn.clockerx.myBroadCastReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
+        <service
+            android:name="com.orderinn.clockerx.AlarmService"
+            android:enabled="true"
+            android:exported="false"
+            android:stopWithTask="false"/>
     </application>
 
 </manifest>

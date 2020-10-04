@@ -31,7 +31,7 @@ public class AlarmActivity extends AppCompatActivity {
     private ArrayList<AlarmObject> alarms;
     private ArrayList<SwitchCompat> alarmViews;
     SharedPreferences sharedPreferences;
-    ObjectSerializer objectSerializer;
+    int idCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,6 @@ public class AlarmActivity extends AppCompatActivity {
 
         //Create or open shared preferences calls "Alarms"
         sharedPreferences = this.getSharedPreferences("Alarms", Context.MODE_PRIVATE);
-        objectSerializer = new ObjectSerializer();
 
         //Fundamental initializations
         alarms = new ArrayList<>();
@@ -48,8 +47,7 @@ public class AlarmActivity extends AppCompatActivity {
         alarmListGridLayout = (GridLayout) findViewById(R.id.alarmListGridLayout);
 
         getAlarmsFromPreferences();
-
-
+        idCount = alarms.size();
 
     }
 
@@ -58,6 +56,23 @@ public class AlarmActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), AddAnAlarmActivity.class);
         startActivityForResult(intent, 1);
     }
+
+    public void setAlarm(AlarmObject obj,long millis){
+        Intent intent = new Intent(this, myBroadCastReceiver.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        try{
+            intent.putExtra("Object", ObjectSerializer.serializeArrayList(obj));//Change the method name if it works.
+            intent.putExtra("Id", obj.getId());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0 , intent, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP,  millis, pendingIntent);
+        Log.i("ALARMINFO", "NEW ALARM SET");
+    }
+
 
 
 
@@ -68,15 +83,20 @@ public class AlarmActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(resultCode == RESULT_OK && requestCode == 1){
+            idCount++;
             long millis = data.getLongExtra("Time", 0);
             String title = data.getStringExtra("Title");
 
-            AlarmObject newAlarm = new AlarmObject(this, millis, title);
+            AlarmObject newAlarm = new AlarmObject(this, millis, title, idCount);
+            Log.i("ALARMINFO", String.valueOf(idCount));
+
             alarms.add(newAlarm);
             AlarmObject.sortObjectArrayList(alarms);
             syncAlarmLists();
+            setAlarm(newAlarm, millis);
         }
     }
+
 
     private void syncAlarmLists() {
         alarmViews.clear();
@@ -88,7 +108,6 @@ public class AlarmActivity extends AppCompatActivity {
         displayAlarmListViews();
 
     }
-
 
 
 
@@ -113,7 +132,7 @@ public class AlarmActivity extends AppCompatActivity {
     private void getAlarmsFromPreferences(){
         String tmpString = sharedPreferences.getString("Alarms", "");
         try{
-            alarms = (ArrayList<AlarmObject>) objectSerializer.deserializeStringToArrayList(tmpString);
+            alarms = (ArrayList<AlarmObject>) ObjectSerializer.deserializeStringToArrayList(tmpString);
             if(alarms.size() > 0){
                 AlarmObject.sortObjectArrayList(alarms);
             }
@@ -124,6 +143,8 @@ public class AlarmActivity extends AppCompatActivity {
         syncAlarmLists();
     }
 
+
+    //Display all alarms in GridLayout as a SwitchCompat
     private void displayAlarmListViews(){
         for(SwitchCompat switchCompat : alarmViews) {
             alarmListGridLayout.addView(switchCompat);
@@ -136,6 +157,6 @@ public class AlarmActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        sharedPreferences.edit().putString("Alarms",objectSerializer.serializeArrayList(alarms)).apply();
+        sharedPreferences.edit().putString("Alarms",ObjectSerializer.serializeArrayList(alarms)).apply();
     }
 }

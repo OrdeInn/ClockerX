@@ -57,10 +57,36 @@ public class ObjectSerializer {
         }catch(Exception e){
             throw new RuntimeException(e);
         }
-
-
-
     }
+
+    public static Object deserializeStringToAlarmObject(String str){
+
+        if(str == null || str.length() == 0){
+            return new AlarmObject(null, 0, null, 0);
+        }
+
+        try{
+            byte[] bytesToGet = byteArrayFromString(str);
+
+            ByteArrayInputStream byteIn = new ByteArrayInputStream(bytesToGet);
+            ObjectInputStream in = new ObjectInputStream(byteIn);
+            AlarmObject objectToReturn = (AlarmObject) in.readObject();
+
+            in.close();
+
+            return objectToReturn;
+
+
+
+
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
+
 
     private static String stringFromByteArray(byte[] bytes){
         String result = "";
