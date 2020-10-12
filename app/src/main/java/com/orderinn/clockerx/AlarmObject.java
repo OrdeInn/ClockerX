@@ -1,7 +1,10 @@
 package com.orderinn.clockerx;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
-import androidx.appcompat.widget.SwitchCompat;
+import android.content.Intent;
+import android.util.Log;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -14,12 +17,14 @@ public class AlarmObject implements Serializable {
     private Calendar time;
     private String title;
     private int id;
+    private boolean active;
+
     public AlarmObject(Context context, long millis, String consTitle, int consId){
         time = Calendar.getInstance();
         time.setTimeInMillis(millis);
         title = consTitle;
         id = consId;
-
+        active = true;
 
     }
 
@@ -55,6 +60,30 @@ public class AlarmObject implements Serializable {
     public long getTime(){ return time.getTimeInMillis(); }
     public String getTitle(){ return title; }
     public int getId() { return id; }
+    public boolean isActive() { return active; }
+
+
+    public void setAlarm(Context context){
+        Intent intent = new Intent(context, myBroadCastReceiver.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        try{
+            String serializedObject = ObjectSerializer.serializeObject(this);
+            intent.putExtra("Object", serializedObject);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0 , intent, 0);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP,  time.getTimeInMillis(), pendingIntent);
+        Log.i("ALARM INFO", "NEW ALARM SET");
+    }
+
+    public void unSetAlarm(Context context){
+        context.stopService(new Intent(context, AlarmService.class));
+        active = false;
+        Log.i("ALARM INFO", "Alarm unactivated");
+    }
 
 
 
@@ -63,6 +92,7 @@ public class AlarmObject implements Serializable {
         aInputStream.defaultReadObject();
         time = (Calendar) aInputStream.readObject();
         title = aInputStream.readUTF();
+        active = aInputStream.readBoolean();
     }
 
     private void writeObject(ObjectOutputStream aOutputStream) throws IOException
@@ -70,6 +100,7 @@ public class AlarmObject implements Serializable {
         aOutputStream.defaultWriteObject();
         aOutputStream.writeObject(time);
         aOutputStream.writeUTF(title);
+        aOutputStream.writeBoolean(active);
     }
 
 }

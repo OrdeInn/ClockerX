@@ -7,20 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".AlarmActivity">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="120dp">
-
-
-        <GridLayout
-            android:id="@+id/alarmListGridLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" />
-
-
-    </ScrollView>
+   <ListView
+       android:id="@+id/alarmListView"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       app:layout_constraintBottom_toTopOf="@+id/button"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"/>
 
 
 

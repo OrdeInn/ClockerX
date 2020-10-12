@@ -12,7 +12,7 @@ public class ObjectSerializer {
 
 
 
-    public static String serializeArrayList(Serializable obj){
+    public static String serializeObject(Serializable obj){
 
         if(obj == null){
             return "";
@@ -75,9 +75,6 @@ public class ObjectSerializer {
             in.close();
 
             return objectToReturn;
-
-
-
 
         }catch(Exception e){
             throw new RuntimeException(e);

@@ -24,6 +24,7 @@ public class AddAnAlarmActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_an_alarm);
 
+        //Basic initializations
         newAlarm = Calendar.getInstance();
 
         alarmTitle = findViewById(R.id.alarmTitle);
@@ -34,17 +35,16 @@ public class AddAnAlarmActivity extends AppCompatActivity {
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker timePicker, int hour, int minute) {
-                timeText.setText(String.valueOf(hour) + ":" + String.valueOf(minute));
+                timeText.setText(String.format("%02d : %02d", hour, minute));
                 newAlarm.set(Calendar.HOUR_OF_DAY, hour);
                 newAlarm.set(Calendar.MINUTE, minute);
                 newAlarm.set(Calendar.SECOND, 0);
             }
         });
-
     }
 
     public void newAlarm(View view){
-        //Put a new alarm to the intent
+        //Puts a new alarm to the intent
 
         Intent returnIntent = new Intent();
         returnIntent.putExtra("Time", newAlarm.getTimeInMillis());
@@ -53,11 +53,4 @@ public class AddAnAlarmActivity extends AppCompatActivity {
 
         finish();
     }
-
-
-
-
-    
-
-
 }

@@ -9,31 +9,33 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
-import android.os.PowerManager;
 import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 public class AlarmService extends Service {
 
-    int id;
+    AlarmObject alarmObject;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i("ALARMINFO", "Service is running");
-
-
+        Log.i("ALARM INFO", "Service is running");
 
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        id = intent.getIntExtra("Id", 0);
+        try{
+            alarmObject = (AlarmObject) ObjectSerializer.deserializeStringToAlarmObject(intent.getStringExtra("Object"));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         Intent receiverIntent = new Intent(this, AlarmReceiver.class);
-        receiverIntent.putExtra("Object", intent.getStringExtra("Object"));
+        receiverIntent.putExtra("Title", alarmObject.getTitle());
+        receiverIntent.putExtra("Id", alarmObject.getId());
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, receiverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -55,7 +57,7 @@ public class AlarmService extends Service {
 
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
-                    .setContentTitle("Alarm")
+                    .setContentTitle(alarmObject.getTitle())
                     .setContentText("")
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setCategory(NotificationCompat.CATEGORY_ALARM)
@@ -64,11 +66,10 @@ public class AlarmService extends Service {
 
             Notification notification = notificationBuilder.build();
 
-            startForeground(id, notification);
+            startForeground(alarmObject.getId(), notification);
         }else {
             startForeground(-1, new Notification());
         }
-
 
     }
 
