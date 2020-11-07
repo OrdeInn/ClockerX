@@ -1,4 +1,6 @@
-package com.orderinn.clockerx;
+package com.orderinn.clockerx.AlarmClock;
+
+import com.orderinn.clockerx.AlarmClock.AlarmObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -6,7 +8,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class ObjectSerializer {
 
@@ -62,7 +63,7 @@ public class ObjectSerializer {
     public static Object deserializeStringToAlarmObject(String str){
 
         if(str == null || str.length() == 0){
-            return new AlarmObject(null, 0, null, 0);
+            return new AlarmObject(null, 0, null, 0, null, null, -1);
         }
 
         try{

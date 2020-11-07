@@ -8,6 +8,7 @@
     <uses-permission android:name="your.package.alarm.permission.SET_ALARM" />
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -16,7 +17,6 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,24 +24,37 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddAnAlarmActivity" />
-        <activity android:name=".AlarmReceiver" android:excludeFromRecents="true" android:showOnLockScreen="true" android:showWhenLocked="true" android:turnScreenOn="true" android:showForAllUsers="true"
-            />
-        <activity android:name=".EggTimerActivity" android:parentActivityName=".MainActivity" />
-        <activity android:name=".WorldClockActivty" android:parentActivityName=".MainActivity"/>
-        <activity android:name=".TimerActivty" android:parentActivityName=".MainActivity"/>
-        <activity android:name=".AlarmActivity" android:parentActivityName=".MainActivity"/>
+        <activity android:name=".AlarmClock.AddAnAlarmActivity" />
+        <activity
+            android:name=".AlarmClock.AlarmReceiver"
+            android:excludeFromRecents="true"
+            android:showForAllUsers="true"
+            android:showOnLockScreen="true"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true" />
+        <activity
+            android:name=".EggTimerActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".WorldClockActivty"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".TimerActivty"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".AlarmClock.AlarmActivity"
+            android:parentActivityName=".MainActivity" />
 
-
-        <receiver android:name="com.orderinn.clockerx.myBroadCastReceiver"
+        <receiver
+            android:name=".AlarmClock.myBroadCastReceiver"
             android:enabled="true"
             android:exported="true" />
 
         <service
-            android:name="com.orderinn.clockerx.AlarmService"
+            android:name=".AlarmClock.AlarmService"
             android:enabled="true"
             android:exported="false"
-            android:stopWithTask="false"/>
+            android:stopWithTask="false" />
     </application>
 
 </manifest>

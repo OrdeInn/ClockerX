@@ -6,7 +6,7 @@
             <solid android:color="#FFF" />
             <size android:height="40dp" android:width="50dp" />
             <corners android:radius="40dp" />
-            <stroke android:width="2dp" android:color="@color/colorPrimaryDark" />
+            <stroke android:width="2dp" android:color="#4B0000" />
         </shape>
 
     </item>
@@ -16,7 +16,7 @@
             <solid android:color="#FFF" />
             <size android:height="40dp" android:width="50dp" />
             <corners android:radius="40dp" />
-            <stroke android:width="2dp" android:color="@color/colorPrimaryDark"/>
+            <stroke android:width="2dp" android:color="#5C0000"/>
         </shape>
 
     </item>

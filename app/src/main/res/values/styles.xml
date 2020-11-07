@@ -10,9 +10,9 @@
     <style name="CustomTimePicker" parent="ThemeOverlay.AppCompat.Dialog.Alert">
 
         <item name="title">false</item>
-        <item name="android:textColorPrimary">#000000</item>
-        <item name="android:textColorSecondary">#bb88bb</item>
-        <item name="android:textSize">28sp</item>
+        <item name="android:textColorPrimary">#ffffff</item>
+        <item name="android:textColorSecondary">#000000</item>
+        <item name="android:textSize">30sp</item>
         <item name="android:background">@drawable/custom_time_picker</item>
 
 

@@ -4,56 +4,71 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#343434"
     tools:context=".MainActivity">
 
-
-    <androidx.gridlayout.widget.GridLayout
-        android:layout_width="380dp"
-        android:layout_height="550dp"
-        android:layout_marginTop="0dp"
-        app:columnCount="1"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <Button
+        android:id="@+id/alarmClockButton"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="40dp"
+        android:background="@drawable/main_activity_button"
+        android:text="Alarm Clock"
+        android:textSize="25sp"
+        android:textColor="#ffffff"
+        android:onClick="startAlarmActivity"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:rowCount="4">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/alarmButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="startAlarmActivity"
-            android:text="Alarm"
-            app:layout_columnWeight="1"
-            app:layout_rowWeight="1" />
+    <Button
+        android:id="@+id/timerButton"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginHorizontal="40dp"
+        android:background="@drawable/main_activity_button"
+        android:text="Timer"
+        android:textColor="#ffffff"
+        android:textSize="25sp"
+        android:layout_marginTop="20dp"
+        android:onClick="startTimerActivity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/alarmClockButton" />
 
-        <Button
-            android:id="@+id/timerButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="startTimerActivity"
-            android:text="Timer"
-            app:layout_columnWeight="1"
-            app:layout_rowWeight="1" />
+    <Button
+        android:id="@+id/eggTimerButton"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginHorizontal="40dp"
+        android:background="@drawable/main_activity_button"
+        android:text="Egg Timer"
+        android:textColor="#ffffff"
+        android:textSize="25sp"
+        android:layout_marginTop="20dp"
+        android:onClick="startEggTimerActivity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/timerButton" />
 
-        <Button
-            android:id="@+id/worldClockButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="startWorldClockActivity"
-            android:text="World Clock"
-            app:layout_columnWeight="1"
-            app:layout_rowWeight="1" />
-
-        <Button
-            android:id="@+id/eggTimerButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="startEggTimerActivity"
-            android:text="Egg Timer"
-            app:layout_columnWeight="1"
-            app:layout_rowWeight="1" />
+    <Button
+        android:id="@+id/worldClockButton"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginHorizontal="40dp"
+        android:background="@drawable/main_activity_button"
+        android:text="Timer"
+        android:textColor="#ffffff"
+        android:textSize="25sp"
+        android:layout_marginTop="20dp"
+        android:onClick="startWorldClockActivity"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/eggTimerButton" />
 
 
-    </androidx.gridlayout.widget.GridLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

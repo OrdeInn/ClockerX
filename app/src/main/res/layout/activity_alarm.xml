@@ -5,7 +5,8 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AlarmActivity">
+    tools:context=".AlarmClock.AlarmActivity"
+    android:background="#343434">
 
    <ListView
        android:id="@+id/alarmListView"
@@ -13,7 +14,8 @@
        android:layout_height="match_parent"
        app:layout_constraintBottom_toTopOf="@+id/button"
        app:layout_constraintStart_toStartOf="parent"
-       app:layout_constraintTop_toTopOf="parent"/>
+       app:layout_constraintTop_toTopOf="parent"
+       android:dividerHeight="5.0dp"/>
 
 
 

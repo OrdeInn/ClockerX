@@ -1,15 +1,18 @@
-package com.orderinn.clockerx;
+package com.orderinn.clockerx.AlarmClock;
 
 
 import android.app.Activity;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import com.orderinn.clockerx.ArrayAdapters.AlarmArrayAdapter;
+import com.orderinn.clockerx.R;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -21,7 +24,9 @@ public class AlarmReceiver extends Activity {
     TextView alarmTitle;
     TextView timeText;
     MediaPlayer mediaPlayer;
+    String ringtone;
     int alarmId;
+    int snoozeInterval;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +40,8 @@ public class AlarmReceiver extends Activity {
         alarmTitle.setText(intent.getStringExtra("Title"));
 
         alarmId = intent.getIntExtra("Id", 0);
+        ringtone = intent.getStringExtra("Ringtone");
+        snoozeInterval = intent.getIntExtra("SnoozeInterval", -1);
 
         //Print current time in pattern HH:mm
         timeText  = findViewById(R.id.timeText);
@@ -44,9 +51,6 @@ public class AlarmReceiver extends Activity {
 
 
 
-
-        Log.i("ALARM INFO", "AlarmReceiver activity is activated");
-
         //Wakes screen up
         PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
@@ -54,9 +58,28 @@ public class AlarmReceiver extends Activity {
         wakeLock.acquire();
 
 
-        mediaPlayer = MediaPlayer.create(this, R.raw.airhorn);
+        mediaPlayer = MediaPlayer.create(this, Uri.parse(ringtone));
         mediaPlayer.start();
 
+    }
+
+    public void snoozeAlarm(View view){
+
+        stopService(new Intent(AlarmReceiver.this, AlarmService.class));
+        mediaPlayer.stop();
+
+        AlarmObject alarm =  AlarmArrayAdapter.getAlarmList().get(alarmId-1);
+        alarm.unSetAlarm(this);
+
+        if(snoozeInterval == -1){
+            alarm.setTime(alarm.getTime() + 5 * (60000));
+        }else{
+            alarm.setTime(alarm.getTime() + snoozeInterval * (60000));
+        }
+
+        alarm.setAlarm(this);
+
+        finish();
     }
 
     public void cancelAlarm(View view) {
@@ -64,7 +87,6 @@ public class AlarmReceiver extends Activity {
         stopService(new Intent(AlarmReceiver.this, AlarmService.class));
         mediaPlayer.stop();
         AlarmArrayAdapter.getAlarmList().get(alarmId-1).unSetAlarm(this);
-
 
         finish();
     }

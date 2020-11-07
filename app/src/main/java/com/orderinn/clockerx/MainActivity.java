@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.orderinn.clockerx.AlarmClock.AlarmActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -16,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void startAlarmActivity(View view){
 
-        Intent intent = new Intent(this.getApplicationContext() ,AlarmActivity.class);
+        Intent intent = new Intent(this.getApplicationContext() , AlarmActivity.class);
         startActivity(intent);
 
     }

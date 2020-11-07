@@ -1,4 +1,4 @@
-package com.orderinn.clockerx;
+package com.orderinn.clockerx.AlarmClock;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -12,6 +12,8 @@ import android.os.IBinder;
 import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+
+import com.orderinn.clockerx.R;
 
 public class AlarmService extends Service {
 
@@ -36,6 +38,8 @@ public class AlarmService extends Service {
         Intent receiverIntent = new Intent(this, AlarmReceiver.class);
         receiverIntent.putExtra("Title", alarmObject.getTitle());
         receiverIntent.putExtra("Id", alarmObject.getId());
+        receiverIntent.putExtra("Ringtone", alarmObject.getRingtone());
+        receiverIntent.putExtra("SnoozeInterval", alarmObject.getSnoozeInterval());
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, receiverIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 

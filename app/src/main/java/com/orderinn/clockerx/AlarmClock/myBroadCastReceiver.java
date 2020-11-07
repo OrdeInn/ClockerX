@@ -1,9 +1,11 @@
-package com.orderinn.clockerx;
+package com.orderinn.clockerx.AlarmClock;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
+import com.orderinn.clockerx.AlarmClock.AlarmService;
 
 public class myBroadCastReceiver extends BroadcastReceiver {
     @Override
